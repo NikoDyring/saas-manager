@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_10_131648) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_10_224136) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,6 +31,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_10_131648) do
     t.index ["slug"], name: "index_organizations_on_slug"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "amount_cents", default: 0, null: false
+    t.string "billing_cycle", default: "monthly"
+    t.datetime "created_at", null: false
+    t.string "currency", default: "DKK"
+    t.bigint "organization_id", null: false
+    t.date "renewal_date"
+    t.string "status", default: "active"
+    t.datetime "updated_at", null: false
+    t.bigint "vendor_id", null: false
+    t.index ["organization_id"], name: "index_subscriptions_on_organization_id"
+    t.index ["vendor_id"], name: "index_subscriptions_on_vendor_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
@@ -45,4 +59,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_10_131648) do
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  create_table "vendors", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.string "logo_url"
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "subscriptions", "organizations"
+  add_foreign_key "subscriptions", "vendors"
 end
