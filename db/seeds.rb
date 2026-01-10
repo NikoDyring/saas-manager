@@ -24,7 +24,7 @@ vendors.each do |vendor|
   Subscription.create!(
     organization: org,
     vendor: vendor,
-    billing_cycle: ['monthly', 'annual'].sample,
+    billing_cycle: [ 'monthly', 'annual' ].sample,
     amount_cents: rand(1000..10000),
     currency: 'DKK',
     renewal_date: Date.today + rand(30..365).days,
