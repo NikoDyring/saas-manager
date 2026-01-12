@@ -1,24 +1,22 @@
-# README
+# SaaS Manager
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is an application I've built to try out and showcase. It's built with Ruby on Rails for the backend, and a Vue application for the frontend.
 
-Things you may want to cover:
+## Tech Stack
+### Backend
+* Framework - Ruby on Rails
+* Database - PostgreSQL
+* Authentication - Devise with JWT (JSON Web Tokens)
+* Security - Scoped data isolation (Multi-tenancy)
+* Well-tested - RSpec with focus on integrationtests
 
-* Ruby version
+**Features (Currently)**
+* JWT Auth
+* Multi-tenant architecture: Users are connected to an organization. The API makes sure via current_organization, that you can only edit and see data that is attached to that organization.
+* Subscription Management: API-endpoints for managing subscriptions (CRUD), including relations to Vendors
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Roadmap
+* [x] JWT Auth & API Scoping
+* [ ] Vue3 Frontend Application with a nice dashboard
+* [ ] Visualisation with graphs (Possibly Chart.js?)
+* [ ] Notifications befroe renewal dates
