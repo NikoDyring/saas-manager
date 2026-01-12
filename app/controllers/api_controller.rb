@@ -1,6 +1,8 @@
 class ApiController < ActionController::API
   before_action :authenticate_user!
 
+  respond_to :json
+
   def current_organization
     @current_organization ||= current_user.organization
   end
