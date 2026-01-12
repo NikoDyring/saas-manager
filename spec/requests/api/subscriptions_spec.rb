@@ -66,16 +66,28 @@ RSpec.describe "Api::Subscriptions", type: :request do
     end
   end
 
-  it "virker med manuel token" do
+  it "logs in with JWT token manually passed" do
     post "/login", 
         params: { user: { email: user.email, password: user.password } }.to_json, 
         headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
     
     token = response.headers['Authorization']
-    
-    puts "Response: #{response.body}"
-    puts User.count
+  
     expect(response.status).to eq(200)
     expect(token).to be_present
+  end
+
+  it "logs out successfully" do
+    post "/login", 
+        params: { user: { email: user.email, password: user.password } }.to_json, 
+        headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
+    
+    token = response.headers['Authorization']
+    expect(token).to be_present
+
+    delete "/logout",
+        headers: { 'Authorization' => token, 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
+    
+    expect(response.status).to eq(200)
   end
 end
