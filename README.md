@@ -1,4 +1,4 @@
-# SaaS Manager
+# SaaS Manager (Work in Progress)
 
 This is an application I've built to try out and showcase. It's built with Ruby on Rails for the backend, and a Vue application for the frontend.
 
