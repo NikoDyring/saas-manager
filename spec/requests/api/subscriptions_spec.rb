@@ -3,25 +3,25 @@ require 'rails_helper'
 RSpec.describe "Api::Subscriptions", type: :request do
   let(:organization) { Organization.create!(name: "Test Org", slug: "test-org") }
   let(:other_organization) { Organization.create!(name: "Other Org", slug: "other-org") }
-  
+
   let(:user) { User.create!(email: "dev@example.com", password: "password123", organization: organization) }
-  
+
   let(:vendor) { Vendor.create!(name: "Slack", category: "Comm") }
-  
-  let!(:my_subscription) do 
+
+  let!(:my_subscription) do
     Subscription.create!(
-      organization: organization, 
-      vendor: vendor, 
-      amount_cents: 1000, 
+      organization: organization,
+      vendor: vendor,
+      amount_cents: 1000,
       renewal_date: Date.today
     )
   end
-  
-  let!(:other_subscription) do 
+
+  let!(:other_subscription) do
     Subscription.create!(
-      organization: other_organization, 
-      vendor: vendor, 
-      amount_cents: 5000, 
+      organization: other_organization,
+      vendor: vendor,
+      amount_cents: 5000,
       renewal_date: Date.today
     )
   end
@@ -31,10 +31,10 @@ RSpec.describe "Api::Subscriptions", type: :request do
   describe "GET /api/subscriptions" do
     it "returnerer kun abonnementer tilhørende brugerens organisation" do
       get api_subscriptions_path, headers: headers, as: :json
-      
+
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
-      
+
       # Tjek at vi kun får 1 tilbage (my_subscription), ikke 2.
       expect(json.size).to eq(1)
       expect(json.first["id"]).to eq(my_subscription.id)
@@ -43,7 +43,7 @@ RSpec.describe "Api::Subscriptions", type: :request do
     it "inkluderer vendor data i JSON outputtet (N+1 tjek)" do
       get api_subscriptions_path, headers: headers, as: :json
       json = JSON.parse(response.body)
-      
+
       expect(json.first["vendor"]).to be_present
       expect(json.first["vendor"]["name"]).to eq("Slack")
     end
@@ -67,27 +67,27 @@ RSpec.describe "Api::Subscriptions", type: :request do
   end
 
   it "logs in with JWT token manually passed" do
-    post "/login", 
-        params: { user: { email: user.email, password: user.password } }.to_json, 
+    post "/login",
+        params: { user: { email: user.email, password: user.password } }.to_json,
         headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
-    
+
     token = response.headers['Authorization']
-  
+
     expect(response.status).to eq(200)
     expect(token).to be_present
   end
 
   it "logs out successfully" do
-    post "/login", 
-        params: { user: { email: user.email, password: user.password } }.to_json, 
+    post "/login",
+        params: { user: { email: user.email, password: user.password } }.to_json,
         headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
-    
+
     token = response.headers['Authorization']
     expect(token).to be_present
 
     delete "/logout",
         headers: { 'Authorization' => token, 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
-    
+
     expect(response.status).to eq(200)
   end
 end
