@@ -8,7 +8,7 @@ puts "Creating organization..."
 org = Organization.create!(name: 'Dyring Dev', slug: 'dyring-dev', plan: 'premium')
 
 puts "Creating user..."
-user = User.create!(organization: org, email: 'user@dyringdev.com', password: 'password', role: 'admin')
+user = User.create!(organization: org, email: 'user@dyringdev.com', password: 'password', role: 'admin', jti: SecureRandom.uuid)
 
 puts "Creating vendors..."
 vendors = [
